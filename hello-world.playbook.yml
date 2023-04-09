@@ -1,0 +1,44 @@
+---
+- name: Repository "Hello-World"  
+  hosts: localhost
+  tasks: 
+    - name: Clone repository from Github
+      git:
+        repo: https://github.com/cristian1534/Ansible.git
+        dest: /home/hello-world
+        clone: yes
+        update: yes
+      become: true
+
+    - name: Replace "DevOps" instead "World in App.js"
+      lineinfile:
+        path: /home/hello-world/src/App.js
+        regexp: Hello World!
+        line: Hello DevOps!
+
+    - name: Replace "DevOps" instead "World in App.test.js"
+      lineinfile:
+        path: /home/hello-world/src/App.test.js
+        regexp: Hello World!
+        line: Hello DevOps!
+
+    - name: Build image "Hello-DevOps"
+      docker_image:
+        build:
+          path: /home/hello-world
+        name: cristianmachuca/hello-devops
+        tag: latest
+        source: build
+      become: true
+
+- name: Container "Hello-DevOps-container"
+  hosts: localhost
+  tasks:
+    - name: Create && Run container "Hello-DevOPs-container"
+      docker_container:
+        name: Hello-DevOps-container
+        image: cristianmachuca/hello-devops
+        state: started
+        ports:
+          - "3000:3000"
+      become: true
