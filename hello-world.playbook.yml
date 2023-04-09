@@ -13,14 +13,8 @@
     - name: Replace "DevOps" instead "World in App.js"
       lineinfile:
         path: /home/hello-world/src/App.js
-        regexp: Hello World!
-        line: Hello DevOps!
-
-    - name: Replace "DevOps" instead "World in App.test.js"
-      lineinfile:
-        path: /home/hello-world/src/App.test.js
-        regexp: Hello World!
-        line: Hello DevOps!
+        regexp: Hello World
+        line: const linkElement = screen.getByText(/Hello DevOps!/i);
 
     - name: Build image "Hello-DevOps"
       docker_image:
